@@ -75,7 +75,10 @@ func autoMigrate() error {
 	// 自动创建需要的表，需要注意的是，这里的顺序不能乱，因为有外键约束
 	err := Mysql.AutoMigrate(&model.Course{},
 		&model.Chapter{},
-		&model.Question{})
+		&model.Question{},
+		&model.User{},
+		&model.UserCourseProgress{},
+		&model.UserChapterProgress{})
 	if err != nil {
 		return err
 	}
