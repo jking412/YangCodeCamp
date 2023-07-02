@@ -77,6 +77,15 @@ func SubmitQuestion(c *gin.Context) {
 		return
 	}
 
+	chapter := &model.Chapter{}
+	err = db.Mysql.Model(&model.Chapter{}).Where("question_id = ?", question.ID).First(&chapter).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "error",
+		})
+		return
+	}
+
 	answerChecker, err := answer.GetAnswerChecker(question.Type, question.Answer)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -88,7 +97,13 @@ func SubmitQuestion(c *gin.Context) {
 	err = answerChecker.Check(req.Content)
 	if err != nil {
 		if err == answer.ErrAnswerNotMatch {
-			questionService.UpdateStatus(question.ID, model.FailChapter)
+			err = db.Mysql.Model(&chapter).Where("question_id = ?", question.ID).Update("status", model.FailChapter).Error
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{
+					"message": "update error",
+				})
+				return
+			}
 			c.JSON(http.StatusOK, gin.H{
 				"message": "answer error",
 			})
@@ -101,7 +116,13 @@ func SubmitQuestion(c *gin.Context) {
 		return
 	}
 
-	questionService.UpdateStatus(question.ID, model.SuccessChapter)
+	err = db.Mysql.Model(&chapter).Where("question_id = ?", question.ID).Update("status", model.SuccessChapter).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "update error",
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"message": "ok",
 	})
