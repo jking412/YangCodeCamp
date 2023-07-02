@@ -13,6 +13,9 @@ func initRouter() {
 	{
 		courseGroup.GET("/:id", controller.GetCourseById)
 		courseGroup.GET("/:id/chapter", controller.GetChaptersByCourseId)
+		courseGroup.GET("/:id/progress", controller.GetProgressByCourseId)
+		courseGroup.GET("/:id/reset", controller.ResetChapters)
+		courseGroup.GET("/:id/resume", controller.ResumeChapter)
 	}
 
 	chapterGroup := r.Group("/chapter")

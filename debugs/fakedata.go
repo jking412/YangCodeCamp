@@ -47,6 +47,7 @@ func generateChapter() {
 			ID:       1,
 			Name:     "HTML-1",
 			CourseID: 1,
+			Number:   1,
 			Question: &model.Question{
 				ID:          1,
 				Answer:      `<div>this is div</div>`,
@@ -61,6 +62,7 @@ func generateChapter() {
 			ID:       2,
 			Name:     "HTML-2",
 			CourseID: 1,
+			Number:   2,
 			Question: &model.Question{
 				ID:          2,
 				Answer:      `<h1>this is h1</h1>`,
@@ -75,6 +77,7 @@ func generateChapter() {
 			ID:       3,
 			Name:     "HTML-3",
 			CourseID: 1,
+			Number:   3,
 			Question: &model.Question{
 				ID:          3,
 				Answer:      `<p>this is p</p>`,
@@ -89,6 +92,7 @@ func generateChapter() {
 			ID:       4,
 			Name:     "CSS-1",
 			CourseID: 2,
+			Number:   1,
 			Question: &model.Question{
 				ID:          4,
 				Answer:      `margin: auto`,
@@ -103,6 +107,7 @@ func generateChapter() {
 			ID:       5,
 			Name:     "CSS-2",
 			CourseID: 2,
+			Number:   2,
 			Question: &model.Question{
 				ID:          5,
 				Answer:      `padding: 10px`,
@@ -117,6 +122,7 @@ func generateChapter() {
 			ID:       6,
 			Name:     "CSS-3",
 			CourseID: 2,
+			Number:   3,
 			Question: &model.Question{
 				ID:          6,
 				Answer:      `background-color: red`,
@@ -131,6 +137,7 @@ func generateChapter() {
 			ID:       7,
 			Name:     "JavaScript-1",
 			CourseID: 3,
+			Number:   1,
 			Question: &model.Question{
 				ID:          7,
 				Answer:      `console.log("hello world")`,
@@ -145,6 +152,7 @@ func generateChapter() {
 			ID:       8,
 			Name:     "JavaScript-2",
 			CourseID: 3,
+			Number:   2,
 			Question: &model.Question{
 				ID:          8,
 				Answer:      `var a = 1`,
