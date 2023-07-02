@@ -21,6 +21,24 @@ type Chapter struct {
 	QuestionID    int
 }
 
+func (c *Chapter) AfterCreate(tx *gorm.DB) (err error) {
+	if c.PreChapterID == 0 {
+		err = tx.Model(&Course{}).Where("id = ?", c.CourseID).Update("first_chapter_id", c.ID).Error
+		if err != nil {
+			return err
+		}
+		return
+	}
+	if c.NextChapterID == 0 {
+		err = tx.Model(&Course{}).Where("id = ?", c.CourseID).Update("last_chapter_id", c.ID).Error
+		if err != nil {
+			return err
+		}
+		return
+	}
+	return
+}
+
 func (c *Chapter) AfterUpdate(tx *gorm.DB) (err error) {
 	if c.Status == SuccessChapter {
 		var count int64

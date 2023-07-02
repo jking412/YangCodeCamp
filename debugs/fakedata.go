@@ -54,6 +54,8 @@ func generateChapter() {
 				Description: "在div标签中输入this is div",
 				Type:        model.HTML,
 			},
+			PreChapterID:  0,
+			NextChapterID: 2,
 		},
 		{
 			ID:       2,
@@ -66,6 +68,8 @@ func generateChapter() {
 				Description: "在h1标签中输入this is h1",
 				Type:        model.HTML,
 			},
+			PreChapterID:  1,
+			NextChapterID: 3,
 		},
 		{
 			ID:       3,
@@ -78,6 +82,8 @@ func generateChapter() {
 				Description: "在p标签中输入this is p",
 				Type:        model.HTML,
 			},
+			PreChapterID:  2,
+			NextChapterID: 0,
 		},
 		{
 			ID:       4,
@@ -90,6 +96,8 @@ func generateChapter() {
 				Description: "设置margin为auto",
 				Type:        model.CSS,
 			},
+			PreChapterID:  0,
+			NextChapterID: 5,
 		},
 		{
 			ID:       5,
@@ -102,6 +110,8 @@ func generateChapter() {
 				Description: "设置padding为10px",
 				Type:        model.CSS,
 			},
+			PreChapterID:  4,
+			NextChapterID: 6,
 		},
 		{
 			ID:       6,
@@ -114,6 +124,8 @@ func generateChapter() {
 				Description: "设置background-color为red",
 				Type:        model.CSS,
 			},
+			PreChapterID:  5,
+			NextChapterID: 0,
 		},
 		{
 			ID:       7,
@@ -126,6 +138,8 @@ func generateChapter() {
 				Description: "在控制台输出hello world",
 				Type:        model.JavaScript,
 			},
+			PreChapterID:  0,
+			NextChapterID: 8,
 		},
 		{
 			ID:       8,
@@ -138,6 +152,8 @@ func generateChapter() {
 				Description: "声明一个变量a并赋值为1",
 				Type:        model.JavaScript,
 			},
+			PreChapterID:  7,
+			NextChapterID: 9,
 		},
 	}
 	err := db.Mysql.Create(&chapters).Error
