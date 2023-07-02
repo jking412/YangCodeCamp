@@ -8,19 +8,23 @@ import (
 func initRouter() {
 	r.GET("/ping", ping)
 
-	r.GET("/class", controller.GetAllClasses)
-	//classGroup := r.Group("/class")
-	//{
-	//}
+	r.GET("/course", controller.GetAllCourses)
+	courseGroup := r.Group("/course")
+	{
+		courseGroup.GET("/:id", controller.GetCourseById)
+		courseGroup.GET("/:id/chapter", controller.GetChaptersByCourseId)
+	}
 
 	chapterGroup := r.Group("/chapter")
 	{
-		chapterGroup.GET("/:id", controller.GetChapterByClassId)
+		chapterGroup.GET("/:id", controller.GetChapterById)
+		chapterGroup.GET("/:id/question", controller.GetQuestionByChapterId)
 	}
 
 	questionGroup := r.Group("/question")
 	{
 		questionGroup.GET("/:id", controller.GetQuestionById)
+		questionGroup.POST("/:id/submit", controller.SubmitQuestion)
 	}
 }
 

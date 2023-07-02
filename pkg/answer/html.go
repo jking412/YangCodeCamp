@@ -43,16 +43,26 @@ func (q *HtmlQuestion) Check(content any) error {
 	contentNode := contentRoot.FirstChild
 
 	for answerNode != nil && contentNode != nil {
-		if answerNode.Type != contentNode.Type {
-			return ErrAnswerNotMatch
+
+		for {
+			if answerNode.Type != contentNode.Type {
+				return ErrAnswerNotMatch
+			}
+
+			if strings.Trim(answerNode.Data, " ") != strings.Trim(contentNode.Data, " ") {
+				return ErrAnswerNotMatch
+			}
+
+			if answerNode.NextSibling == nil || contentNode.NextSibling == nil {
+				break
+			}
+
+			answerNode = answerNode.NextSibling
+			contentNode = contentNode.NextSibling
 		}
 
-		if strings.Trim(answerNode.Data, " ") != strings.Trim(contentNode.Data, " ") {
-			return ErrAnswerNotMatch
-		}
-
-		answerNode = answerNode.NextSibling
-		contentNode = contentNode.NextSibling
+		answerNode = answerNode.FirstChild
+		contentNode = contentNode.FirstChild
 	}
 
 	if answerNode != nil || contentNode != nil {

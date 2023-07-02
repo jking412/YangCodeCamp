@@ -73,7 +73,7 @@ func connect(c *MysqlConfig) {
 // autoMigrate 自动化建表
 func autoMigrate() error {
 	// 自动创建需要的表，需要注意的是，这里的顺序不能乱，因为有外键约束
-	err := Mysql.AutoMigrate(&model.Class{},
+	err := Mysql.AutoMigrate(&model.Course{},
 		&model.Chapter{},
 		&model.Question{})
 	if err != nil {
