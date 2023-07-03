@@ -2,10 +2,12 @@ package web
 
 import (
 	"YangCodeCamp/controller"
+	"YangCodeCamp/controller/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func initRouter() {
+	r.Use(middleware.Cors())
 	r.GET("/ping", ping)
 
 	r.GET("/course", controller.GetAllCourses)
