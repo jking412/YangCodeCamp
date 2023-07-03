@@ -5,6 +5,8 @@ import (
 	"YangCodeCamp/model"
 	"YangCodeCamp/pkg/paginations"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"net/http"
 	"strconv"
 )
@@ -64,29 +66,29 @@ type GetCourseByIdResp struct {
 
 func GetCourseById(c *gin.Context) {
 
-	//idStr := c.Param("id")
-	//id, err := strconv.Atoi(idStr)
-	//if err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{
-	//		"message": "id error",
-	//	})
-	//	return
-	//}
-	//
-	//course := &model.Course{}
-	//err = db.Mysql.Model(&model.Course{}).Where("id = ?", id).Preload(clause.Associations).First(&course).Error
-	//if err != nil {
-	//	if err == gorm.ErrRecordNotFound {
-	//		c.JSON(http.StatusNotFound, gin.H{
-	//			"message": "not found",
-	//		})
-	//		return
-	//	}
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"message": "error",
-	//	})
-	//	return
-	//}
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "id error",
+		})
+		return
+	}
+
+	course := &model.Course{}
+	err = db.Mysql.Model(&model.Course{}).Where("id = ?", id).Preload(clause.Associations).First(&course).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{
+				"message": "not found",
+			})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "error",
+		})
+		return
+	}
 
 	resp := &GetCourseByIdResp{
 		Course: &model.Course{},

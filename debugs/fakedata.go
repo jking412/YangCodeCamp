@@ -9,12 +9,12 @@ import (
 func main() {
 	config.InitConfig("config")
 	db.Init()
+	db.Mysql.Exec("delete from questions")
 	db.Mysql.Exec("delete from chapters")
 	db.Mysql.Exec("delete from courses")
-	db.Mysql.Exec("delete from questions")
 	generateClass()
 	generateChapter()
-	//generateQuestion()
+	generateQuestion()
 }
 
 func generateClass() {
@@ -170,106 +170,41 @@ func generateChapter() {
 			CourseID:      1,
 			NextChapterID: 2,
 			PreChapterID:  0,
-			Question: []*model.Question{
-				{
-					ID:             1,
-					Answer:         `<div>this is div</div>`,
-					Content:        `<div>...</div>`,
-					Description:    "在div标签中输入this is div",
-					Type:           model.HTML,
-					Number:         1,
-					NextQuestionID: 2,
-					PreQuestionID:  0,
-				},
-				{
-					ID:             2,
-					Answer:         `<h1>this is h1</h1>`,
-					Content:        `<h1>...</h1>`,
-					Description:    "在h1标签中输入this is h1",
-					Type:           model.HTML,
-					Number:         2,
-					NextQuestionID: 3,
-					PreQuestionID:  1,
-				},
-				{
-					ID:             3,
-					Answer:         `<p>this is p</p>`,
-					Content:        `<p>...</p>`,
-					Description:    "在p标签中输入this is p",
-					Type:           model.HTML,
-					Number:         3,
-					NextQuestionID: 0,
-					PreQuestionID:  2,
-				},
-			},
 		},
 		{
 			ID:            2,
 			Name:          "CSS-First",
 			CourseID:      2,
 			NextChapterID: 3,
-			PreChapterID:  1,
-			Question: []*model.Question{
-				{
-					ID:             4,
-					Answer:         `margin: auto`,
-					Content:        `margin: ...`,
-					Description:    "设置margin为auto",
-					Type:           model.CSS,
-					Number:         1,
-					NextQuestionID: 5,
-					PreQuestionID:  0,
-				},
-				{
-					ID:             5,
-					Answer:         `padding: 10px`,
-					Content:        `padding: ...`,
-					Description:    "设置padding为10px",
-					Type:           model.CSS,
-					Number:         2,
-					NextQuestionID: 6,
-					PreQuestionID:  4,
-				},
-				{
-					ID:             6,
-					Answer:         `background-color: red`,
-					Content:        `background-color: ...`,
-					Description:    "设置background-color为red",
-					Type:           model.CSS,
-					Number:         3,
-					NextQuestionID: 0,
-					PreQuestionID:  5,
-				},
-			},
+			PreChapterID:  0,
 		},
 		{
 			ID:            3,
 			Name:          "JavaScript-First",
 			CourseID:      3,
 			NextChapterID: 4,
+			PreChapterID:  0,
+		},
+		{
+			ID:            4,
+			Name:          "HTML-Second",
+			CourseID:      1,
+			NextChapterID: 0,
+			PreChapterID:  1,
+		},
+		{
+			ID:            5,
+			Name:          "CSS-Second",
+			CourseID:      2,
+			NextChapterID: 0,
 			PreChapterID:  2,
-			Question: []*model.Question{
-				{
-					ID:             7,
-					Answer:         `console.log("hello world")`,
-					Content:        `console.log("...")`,
-					Description:    "在控制台输出hello world",
-					Type:           model.JavaScript,
-					Number:         1,
-					NextQuestionID: 8,
-					PreQuestionID:  0,
-				},
-				{
-					ID:             8,
-					Answer:         `var a = 1`,
-					Content:        `var a = ...`,
-					Description:    "声明一个变量a并赋值为1",
-					Type:           model.JavaScript,
-					Number:         2,
-					NextQuestionID: 9,
-					PreQuestionID:  7,
-				},
-			},
+		},
+		{
+			ID:            6,
+			Name:          "JavaScript-Second",
+			CourseID:      3,
+			NextChapterID: 0,
+			PreChapterID:  3,
 		},
 	}
 	err := db.Mysql.Create(&chapters).Error
@@ -278,23 +213,94 @@ func generateChapter() {
 	}
 }
 
-//func generateQuestion() {
-//	questions := []*model.Question{
-//		{
-//			ChapterID: 1,
-//			Answer:    `<div>this is div</div>`,
-//		},
-//		{
-//			ChapterID: 1,
-//			Answer:    `<h1>this is h1</h1>`,
-//		},
-//		{
-//			ChapterID: 1,
-//			Answer:    `<p>this is p</p>`,
-//		},
-//	}
-//	err := db.Mysql.Create(&questions).Error
-//	if err != nil {
-//		panic(err)
-//	}
-//}
+func generateQuestion() {
+	questions := []*model.Question{
+		{
+			ID:             1,
+			Answer:         `<div>this is div</div>`,
+			Content:        `<div>...</div>`,
+			Description:    "在div标签中输入this is div",
+			Type:           model.HTML,
+			NextQuestionID: 2,
+			PreQuestionID:  0,
+			ChapterID:      1,
+		},
+		{
+			ID:             2,
+			Answer:         `<h1>this is h1</h1>`,
+			Content:        `<h1>...</h1>`,
+			Description:    "在h1标签中输入this is h1",
+			Type:           model.HTML,
+			NextQuestionID: 3,
+			PreQuestionID:  1,
+			ChapterID:      1,
+		},
+		{
+			ID:             3,
+			Answer:         `<p>this is p</p>`,
+			Content:        `<p>...</p>`,
+			Description:    "在p标签中输入this is p",
+			Type:           model.HTML,
+			NextQuestionID: 0,
+			PreQuestionID:  2,
+			ChapterID:      1,
+		},
+		{
+			ID:             4,
+			Answer:         `margin: auto`,
+			Content:        `margin: ...`,
+			Description:    "设置margin为auto",
+			Type:           model.CSS,
+			NextQuestionID: 5,
+			PreQuestionID:  0,
+			ChapterID:      2,
+		},
+		{
+			ID:             5,
+			Answer:         `padding: 10px`,
+			Content:        `padding: ...`,
+			Description:    "设置padding为10px",
+			Type:           model.CSS,
+			NextQuestionID: 6,
+			PreQuestionID:  4,
+			ChapterID:      2,
+		},
+		{
+			ID:             6,
+			Answer:         `background-color: red`,
+			Content:        `background-color: ...`,
+			Description:    "设置background-color为red",
+			Type:           model.CSS,
+			NextQuestionID: 0,
+			PreQuestionID:  5,
+			ChapterID:      2,
+		},
+		{
+			ID:             7,
+			Answer:         `console.log("hello world")`,
+			Content:        `console.log("...")`,
+			Description:    "在控制台输出hello world",
+			Type:           model.JavaScript,
+			NextQuestionID: 8,
+			PreQuestionID:  0,
+			ChapterID:      3,
+		},
+		{
+			ID:             8,
+			Answer:         `var a = 1`,
+			Content:        `var a = ...`,
+			Description:    "声明一个变量a并赋值为1",
+			Type:           model.JavaScript,
+			NextQuestionID: 0,
+			PreQuestionID:  7,
+			ChapterID:      3,
+		},
+	}
+	for _, question := range questions {
+		err := db.Mysql.Create(question).Error
+		if err != nil {
+			panic(err)
+		}
+	}
+
+}

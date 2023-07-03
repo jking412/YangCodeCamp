@@ -68,6 +68,7 @@ func connect(c *MysqlConfig) {
 	if err != nil {
 		fmt.Println("mysql auto migrate error")
 	}
+	Mysql = Mysql.Debug()
 }
 
 // autoMigrate 自动化建表
