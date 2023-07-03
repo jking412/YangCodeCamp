@@ -36,7 +36,6 @@ type JWTCustomClaims struct {
 	UserID       string `json:"user_id"`
 	UserName     string `json:"user_name"`
 	ExpireAtTime int64  `json:"expire_time"`
-	Role         uint8  `json:"role"`
 
 	// StandardClaims 结构体实现了 Claims 接口继承了  Valid() 方法
 	// JWT 规定了7个官方字段，提供使用:
@@ -133,7 +132,6 @@ func (jwt *JWT) IssueToken(userID string, userName string, role uint8) string {
 		UserID:       userID,
 		UserName:     userName,
 		ExpireAtTime: expireAtTime,
-		Role:         role,
 		StandardClaims: jwtpkg.StandardClaims{
 			NotBefore: TimenowInTimezone().Unix(),   // 签名生效时间
 			IssuedAt:  TimenowInTimezone().Unix(),   // 首次签名时间（后续刷新 Token 不会更新）
