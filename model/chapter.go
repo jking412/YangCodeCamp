@@ -10,17 +10,17 @@ const (
 )
 
 type Chapter struct {
-	ID               int    `gorm:"primaryKey"`
-	Name             string `gorm:"column:name;type:varchar(255)"`
-	Description      string
-	Status           Status
-	PreChapterID     int
-	NextChapterID    int
-	FirstQuestionID  int
-	LastQuestionID   int
-	TotalQuestion    int
-	FinishedQuestion int
-	CourseID         int
+	ID               int         `gorm:"primaryKey" json:"id"`
+	Name             string      `gorm:"column:name;type:varchar(255)" json:"name"`
+	Description      string      `json:"description"`
+	Status           Status      `json:"status"`
+	PreChapterID     int         `json:"pre_chapter_id"`
+	NextChapterID    int         `json:"next_chapter_id"`
+	FirstQuestionID  int         `json:"first_question_id"`
+	LastQuestionID   int         `json:"last_question_id"`
+	TotalQuestion    int         `json:"total_question"`
+	FinishedQuestion int         `json:"finished_question"`
+	CourseID         int         `json:"course_id"`
 	Question         []*Question `gorm:"foreignKey:ChapterID;references:ID" json:"-"`
 }
 

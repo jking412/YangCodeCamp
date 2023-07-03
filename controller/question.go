@@ -44,6 +44,7 @@ type SubmitQuestionReq struct {
 }
 
 type SubmitQuestionResp struct {
+	Result model.Status `json:"result"`
 }
 
 func SubmitQuestion(c *gin.Context) {
@@ -107,8 +108,8 @@ func SubmitQuestion(c *gin.Context) {
 				})
 				return
 			}
-			c.JSON(http.StatusOK, gin.H{
-				"message": "answer error",
+			c.JSON(http.StatusOK, SubmitQuestionResp{
+				Result: model.FailQuestion,
 			})
 			return
 		}
@@ -126,7 +127,7 @@ func SubmitQuestion(c *gin.Context) {
 		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "ok",
+	c.JSON(http.StatusOK, SubmitQuestionResp{
+		Result: model.PassQuestion,
 	})
 }
