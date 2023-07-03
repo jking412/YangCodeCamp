@@ -1,13 +1,9 @@
 package main
 
 import (
-	"YangCodeCamp/db"
-	"YangCodeCamp/pkg/config"
-	"YangCodeCamp/web"
+	"YangCodeCamp/boot"
 )
 
 func main() {
-	config.InitConfig("config")
-	db.Init()
-	web.Init()
+	boot.Init()
 }

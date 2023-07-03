@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/gin-gonic/gin v1.9.1
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/spf13/cast v1.5.1
 	github.com/spf13/viper v1.16.0
 	gorm.io/driver/mysql v1.5.1

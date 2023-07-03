@@ -29,6 +29,9 @@ func initRouter() {
 		questionGroup.GET("/:id", controller.GetQuestionById)
 		questionGroup.POST("/:id/submit", controller.SubmitQuestion)
 	}
+
+	r2 := r.Group("/api/v2")
+	r2.GET("/ping", ping)
 }
 
 func ping(c *gin.Context) {
