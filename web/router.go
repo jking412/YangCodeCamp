@@ -28,7 +28,7 @@ func initRouter() {
 	questionGroup := r.Group("/question")
 	{
 		questionGroup.GET("/:id", controller.GetQuestionById)
-		questionGroup.POST("/:id/submit", controller.SubmitQuestion)
+		questionGroup.PUT("/:id/submit", controller.SubmitQuestion)
 	}
 }
 

@@ -30,8 +30,8 @@ func GetAllCourses(c *gin.Context) {
 		pageSize = 10
 	}
 
-	var count int64
-	err = db.Mysql.Model(&model.Course{}).Count(&count).Error
+	courses := make([]*model.Course, 0)
+	err = db.Mysql.Model(&model.Course{}).Find(&courses).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "error",
@@ -39,15 +39,8 @@ func GetAllCourses(c *gin.Context) {
 		return
 	}
 
-	courses := make([]*model.Course, 0)
-	pagination := paginations.NewPagination(int(count), pageNum, pageSize)
-	err = db.Mysql.Model(&model.Course{}).Offset(pagination.Offset()).Limit(pagination.Limit()).Find(&courses).Error
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "error",
-		})
-		return
-	}
+	pagination := paginations.NewPagination(len(courses), pageNum, pageSize)
+	courses = courses[pagination.Start() : pagination.Offset()+pagination.End()]
 
 	resp := &GetAllCoursesResp{
 		Courses:   courses,
@@ -90,14 +83,21 @@ func GetCourseById(c *gin.Context) {
 		return
 	}
 
-	resp := &GetCourseByIdResp{
-		Course: &model.Course{},
+	totalQuestion := 0
+	finishedQuestion := 0
+
+	for _, chapter := range course.Chapters {
+		totalQuestion += chapter.TotalQuestion
+		finishedQuestion += chapter.FinishedQuestion
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "success",
-		"data":    resp,
-	})
+	resp := &GetCourseByIdResp{
+		Course:           course,
+		TotalQuestion:    totalQuestion,
+		FinishedQuestion: finishedQuestion,
+	}
+
+	c.JSON(http.StatusOK, resp)
 }
 
 type GetChaptersByCourseIdResp struct {
@@ -108,35 +108,6 @@ type GetChaptersByCourseIdResp struct {
 
 func GetChaptersByCourseId(c *gin.Context) {
 
-	//idStr := c.Param("id")
-	//id, err := strconv.Atoi(idStr)
-	//if err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{
-	//		"message": "id error",
-	//	})
-	//	return
-	//}
-	//
-	//chapters := make([]*model.Chapter, 0)
-	//err = db.Mysql.Model(&model.Chapter{}).Where("course_id = ?", id).Find(&chapters).Error
-	//if err != nil {
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"message": "error",
-	//	})
-	//	return
-	//}
-	resp := &GetChaptersByCourseIdResp{
-		Chapters: make([]*model.Chapter, 0),
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"message": "success",
-		"data":    resp,
-	})
-}
-
-func GetProgressByCourseId(c *gin.Context) {
-
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
@@ -146,8 +117,20 @@ func GetProgressByCourseId(c *gin.Context) {
 		return
 	}
 
-	chapter := make([]*model.Chapter, 0)
-	err = db.Mysql.Model(&model.Chapter{}).Where("course_id = ?", id).Find(&chapter).Error
+	pageNumStr := c.Query("page_num")
+	pageNum, err := strconv.Atoi(pageNumStr)
+	if err != nil {
+		pageNum = 1
+	}
+
+	pageSizeStr := c.Query("page_size")
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil {
+		pageSize = 10
+	}
+
+	chapters := make([]*model.Chapter, 0)
+	err = db.Mysql.Model(&model.Chapter{}).Where("course_id = ?", id).Find(&chapters).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "error",
@@ -155,23 +138,55 @@ func GetProgressByCourseId(c *gin.Context) {
 		return
 	}
 
-	sum := len(chapter)
-	completeCount := 0
-	for _, v := range chapter {
-		if v.Status == model.SuccessChapter {
-			completeCount++
-		}
+	pagination := paginations.NewPagination(len(chapters), pageNum, pageSize)
+	chapters = chapters[pagination.Start():pagination.End()]
+
+	resp := &GetChaptersByCourseIdResp{
+		Chapters:  chapters,
+		TotalPage: pagination.TotalPage(),
+		PageNum:   pagination.PageNum,
 	}
 
-	completeRate := float64(completeCount) / float64(sum)
-	c.JSON(http.StatusOK, gin.H{
-		"message": "success",
-		"data": gin.H{
-			"complete-rate": completeRate,
-		},
-	})
-
+	c.JSON(http.StatusOK, resp)
 }
+
+//func GetProgressByCourseId(c *gin.Context) {
+//
+//	idStr := c.Param("id")
+//	id, err := strconv.Atoi(idStr)
+//	if err != nil {
+//		c.JSON(http.StatusBadRequest, gin.H{
+//			"message": "id error",
+//		})
+//		return
+//	}
+//
+//	chapter := make([]*model.Chapter, 0)
+//	err = db.Mysql.Model(&model.Chapter{}).Where("course_id = ?", id).Find(&chapter).Error
+//	if err != nil {
+//		c.JSON(http.StatusInternalServerError, gin.H{
+//			"message": "error",
+//		})
+//		return
+//	}
+//
+//	sum := len(chapter)
+//	completeCount := 0
+//	for _, v := range chapter {
+//		if v.Status == model.SuccessChapter {
+//			completeCount++
+//		}
+//	}
+//
+//	completeRate := float64(completeCount) / float64(sum)
+//	c.JSON(http.StatusOK, gin.H{
+//		"message": "success",
+//		"data": gin.H{
+//			"complete-rate": completeRate,
+//		},
+//	})
+//
+//}
 
 //func ResetChapters(c *gin.Context) {
 //

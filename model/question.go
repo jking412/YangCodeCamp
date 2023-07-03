@@ -14,7 +14,7 @@ const (
 
 const (
 	UnfinishedQuestion Status = iota
-	SuccessQuestion
+	PassQuestion
 	FailQuestion
 )
 
@@ -69,7 +69,7 @@ func (q *Question) AfterUpdate(tx *gorm.DB) (err error) {
 	totalQuestion := len(questions)
 	finishedQuestion := 0
 	for _, question := range questions {
-		if question.Status == SuccessQuestion {
+		if question.Status == PassQuestion {
 			finishedQuestion++
 		}
 	}
@@ -137,7 +137,7 @@ func (q *Question) AfterDelete(tx *gorm.DB) (err error) {
 	totalQuestion := len(questions)
 	finishedQuestion := 0
 	for _, question := range questions {
-		if question.Status == SuccessQuestion {
+		if question.Status == PassQuestion {
 			finishedQuestion++
 		}
 	}

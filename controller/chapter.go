@@ -1,9 +1,13 @@
 package controller
 
 import (
+	"YangCodeCamp/db"
 	"YangCodeCamp/model"
+	"YangCodeCamp/pkg/paginations"
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 	"net/http"
+	"strconv"
 )
 
 type GetAllChaptersResp struct {
@@ -13,13 +17,37 @@ type GetAllChaptersResp struct {
 }
 
 func GetAllChapters(c *gin.Context) {
-	resp := &GetAllChaptersResp{
-		Chapters: make([]*model.Chapter, 0),
+
+	pageNumStr := c.Query("page_num")
+	pageNum, err := strconv.Atoi(pageNumStr)
+	if err != nil {
+		pageNum = 1
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"message": "success",
-		"data":    resp,
-	})
+
+	pageSizeStr := c.Query("page_size")
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil {
+		pageSize = 10
+	}
+
+	chapters := make([]*model.Chapter, 0)
+	err = db.Mysql.Model(&model.Chapter{}).Find(&chapters).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "error",
+		})
+		return
+	}
+
+	pagination := paginations.NewPagination(len(chapters), pageNum, pageSize)
+	chapters = chapters[pagination.Start():pagination.End()]
+
+	resp := &GetAllChaptersResp{
+		Chapters:  chapters,
+		TotalPage: pagination.TotalPage(),
+		PageNum:   pagination.PageNum,
+	}
+	c.JSON(http.StatusOK, resp)
 }
 
 type GetChapterByIdResp struct {
@@ -30,38 +58,35 @@ type GetChapterByIdResp struct {
 
 func GetChapterById(c *gin.Context) {
 
-	//idStr := c.Param("id")
-	//id, err := strconv.Atoi(idStr)
-	//if err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{
-	//		"message": "id error",
-	//	})
-	//	return
-	//}
-	//
-	//chapter := &model.Chapter{}
-	//err = db.Mysql.Model(&model.Chapter{}).Where("id = ?", id).Preload(clause.Associations).First(&chapter).Error
-	//if err != nil {
-	//	if err == gorm.ErrRecordNotFound {
-	//		c.JSON(http.StatusNotFound, gin.H{
-	//			"message": "not found",
-	//		})
-	//		return
-	//	}
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"message": "error",
-	//	})
-	//	return
-	//}
-
-	resp := &GetChapterByIdResp{
-		Chapter: &model.Chapter{},
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "id error",
+		})
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "success",
-		"data":    resp,
-	})
+	chapter := &model.Chapter{}
+	err = db.Mysql.Model(&model.Chapter{}).Where("id = ?", id).First(&chapter).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{
+				"message": "not found",
+			})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "error",
+		})
+		return
+	}
+
+	resp := &GetChapterByIdResp{
+		Chapter: chapter,
+	}
+
+	c.JSON(http.StatusOK, resp)
 }
 
 type GetQuestionByChapterIdResp struct {
@@ -72,51 +97,44 @@ type GetQuestionByChapterIdResp struct {
 
 func GetQuestionByChapterId(c *gin.Context) {
 
-	//idStr, _ := c.Params.Get("id")
-	//id, err := strconv.Atoi(idStr)
-	//if err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{
-	//		"message": "id error",
-	//	})
-	//	return
-	//}
-	//
-	//chapter := &model.Chapter{}
-	//err = db.Mysql.Model(&model.Chapter{}).Where("id = ?", id).First(&chapter).Error
-	//if err != nil {
-	//	if err == gorm.ErrRecordNotFound {
-	//		c.JSON(http.StatusNotFound, gin.H{
-	//			"message": "not found",
-	//		})
-	//		return
-	//	}
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"message": "error",
-	//	})
-	//	return
-	//}
-	//
-	//question := &model.Question{}
-	//err = db.Mysql.Model(&model.Question{}).Where("id = ?", chapter.QuestionID).First(&question).Error
-	//if err != nil {
-	//	if err == gorm.ErrRecordNotFound {
-	//		c.JSON(http.StatusNotFound, gin.H{
-	//			"message": "not found",
-	//		})
-	//		return
-	//	}
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"message": "error",
-	//	})
-	//	return
-	//}
-
-	resp := &GetQuestionByChapterIdResp{
-		Questions: make([]*model.Question, 0),
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "id error",
+		})
+		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "success",
-		"data":    resp,
-	})
+	pageNumStr := c.Query("page_num")
+	pageNum, err := strconv.Atoi(pageNumStr)
+	if err != nil {
+		pageNum = 1
+	}
+
+	pageSizeStr := c.Query("page_size")
+	pageSize, err := strconv.Atoi(pageSizeStr)
+	if err != nil {
+		pageSize = 10
+	}
+
+	questions := make([]*model.Question, 0)
+	err = db.Mysql.Model(&model.Question{}).Where("chapter_id = ?", id).Find(&questions).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "error",
+		})
+		return
+	}
+
+	pagination := paginations.NewPagination(len(questions), pageNum, pageSize)
+	questions = questions[pagination.Start():pagination.End()]
+
+	resp := &GetQuestionByChapterIdResp{
+		Questions: questions,
+		TotalPage: pagination.TotalPage(),
+		PageNum:   pagination.PageNum,
+	}
+
+	c.JSON(http.StatusOK, resp)
 }

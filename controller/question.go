@@ -12,28 +12,31 @@ import (
 
 func GetQuestionById(c *gin.Context) {
 
-	//idStr := c.Param("id")
-	//id, err := strconv.Atoi(idStr)
-	//if err != nil {
-	//	c.JSON(http.StatusBadRequest, gin.H{
-	//		"message": "id error",
-	//	})
-	//	return
-	//}
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "id error",
+		})
+		return
+	}
 
 	question := &model.Question{}
-	//err = db.Mysql.Model(&model.Question{}).Where("id = ?", id).First(&question).Error
-	//if err != nil {
-	//	c.JSON(http.StatusInternalServerError, gin.H{
-	//		"message": "error",
-	//	})
-	//	return
-	//}
+	err = db.Mysql.Model(&model.Question{}).Where("id = ?", id).First(&question).Error
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			c.JSON(http.StatusNotFound, gin.H{
+				"message": "not found",
+			})
+			return
+		}
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "error",
+		})
+		return
+	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message": "success",
-		"data":    question,
-	})
+	c.JSON(http.StatusOK, question)
 }
 
 type SubmitQuestionReq struct {
@@ -78,7 +81,7 @@ func SubmitQuestion(c *gin.Context) {
 	}
 
 	chapter := &model.Chapter{}
-	err = db.Mysql.Model(&model.Chapter{}).Where("question_id = ?", question.ID).First(&chapter).Error
+	err = db.Mysql.Model(&model.Chapter{}).Where("id = ?", question.ChapterID).First(&chapter).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "error",
@@ -97,7 +100,7 @@ func SubmitQuestion(c *gin.Context) {
 	err = answerChecker.Check(req.Content)
 	if err != nil {
 		if err == answers.ErrAnswerNotMatch {
-			err = db.Mysql.Model(&chapter).Where("question_id = ?", question.ID).Update("status", model.FailChapter).Error
+			err = db.Mysql.Model(&question).Where("id = ?", question.ID).Update("status", model.FailQuestion).Error
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{
 					"message": "update error",
@@ -116,7 +119,7 @@ func SubmitQuestion(c *gin.Context) {
 		return
 	}
 
-	err = db.Mysql.Model(&chapter).Where("question_id = ?", question.ID).Update("status", model.SuccessChapter).Error
+	err = db.Mysql.Model(&question).Where("id = ?", question.ID).Update("status", model.PassQuestion).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "update error",

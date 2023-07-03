@@ -40,3 +40,18 @@ func (p *Pagination) Offset() int {
 func (p *Pagination) Limit() int {
 	return p.PageSize
 }
+
+func (p *Pagination) Start() int {
+	return p.Offset()
+}
+
+func (p *Pagination) End() int {
+	return min(p.Offset()+p.Limit(), p.TotalCount)
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
