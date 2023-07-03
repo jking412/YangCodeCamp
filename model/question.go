@@ -9,9 +9,15 @@ const (
 )
 
 type Question struct {
-	ID          int    `gorm:"primaryKey"`
-	Type        Type   `gorm:"column:type"`
-	Answer      string `gorm:"column:answer"`
-	Content     string `gorm:"column:content"`
-	Description string `gorm:"column:description"`
+	ID             int `gorm:"primaryKey"`
+	Type           Type
+	Answer         string
+	Content        string
+	Description    string
+	Name           string
+	Number         int
+	Status         Status
+	NextQuestionID int
+	PreQuestionID  int
+	ChapterID      int
 }

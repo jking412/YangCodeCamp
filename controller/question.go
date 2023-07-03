@@ -3,7 +3,7 @@ package controller
 import (
 	"YangCodeCamp/db"
 	"YangCodeCamp/model"
-	"YangCodeCamp/pkg/answer"
+	"YangCodeCamp/pkg/answers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 	"net/http"
@@ -12,23 +12,23 @@ import (
 
 func GetQuestionById(c *gin.Context) {
 
-	idStr := c.Param("id")
-	id, err := strconv.Atoi(idStr)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"message": "id error",
-		})
-		return
-	}
+	//idStr := c.Param("id")
+	//id, err := strconv.Atoi(idStr)
+	//if err != nil {
+	//	c.JSON(http.StatusBadRequest, gin.H{
+	//		"message": "id error",
+	//	})
+	//	return
+	//}
 
 	question := &model.Question{}
-	err = db.Mysql.Model(&model.Question{}).Where("id = ?", id).First(&question).Error
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "error",
-		})
-		return
-	}
+	//err = db.Mysql.Model(&model.Question{}).Where("id = ?", id).First(&question).Error
+	//if err != nil {
+	//	c.JSON(http.StatusInternalServerError, gin.H{
+	//		"message": "error",
+	//	})
+	//	return
+	//}
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "success",
@@ -86,7 +86,7 @@ func SubmitQuestion(c *gin.Context) {
 		return
 	}
 
-	answerChecker, err := answer.GetAnswerChecker(question.Type, question.Answer)
+	answerChecker, err := answers.GetAnswerChecker(question.Type, question.Answer)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "check generate error",
@@ -96,7 +96,7 @@ func SubmitQuestion(c *gin.Context) {
 
 	err = answerChecker.Check(req.Content)
 	if err != nil {
-		if err == answer.ErrAnswerNotMatch {
+		if err == answers.ErrAnswerNotMatch {
 			err = db.Mysql.Model(&chapter).Where("question_id = ?", question.ID).Update("status", model.FailChapter).Error
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{
