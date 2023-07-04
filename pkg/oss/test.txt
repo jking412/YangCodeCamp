@@ -2,13 +2,13 @@ web:
   port: 8000
 
 mysql:
-  host: db
+  host: localhost
   port: 3306
   username: root
   password: 123456
   database: YangCodeCamp
 
 oss:
-  endpoint: "oss:9000"
+  endpoint: "127.0.0.1:9000"
   accessKeyId: "root"
   accessKeySecret: "12345678"

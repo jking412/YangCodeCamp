@@ -6,12 +6,27 @@ services:
         - "8000:8000"
     depends_on:
       - db
+      - oss
   db:
     image: mysql
     ports:
         - "3306:3306"
     volumes:
-      - ./data:/var/lib/mysql
+      - ./data/mysql:/var/lib/mysql
     environment:
         MYSQL_DATABASE: YangCodeCamp
         MYSQL_ROOT_PASSWORD: 123456
+
+  oss:
+    image: minio/minio
+    ports:
+        - "9000:9000"
+        - "9001:9001"
+    volumes:
+        - ./data/oss/data:/data
+        - ./data/oss/config:/root/.minio
+    command: server --console-address ':9001' /data  #指定容器中的目录 /data
+    environment:
+      MINIO_ACCESS_KEY: root
+      MINIO_SECRET_KEY: 12345678
+      MINIO_SERVER_URL: http://localhost:9000
