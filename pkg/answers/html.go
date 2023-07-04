@@ -11,11 +11,12 @@ var (
 )
 
 type HtmlQuestion struct {
-	Answer    string
-	AnswerDom *goquery.Document
+	Answer       string
+	CheckMessage string
+	AnswerDom    *goquery.Document
 }
 
-func NewHtmlQuestion(answer string) (*HtmlQuestion, error) {
+func NewHtmlQuestion(answer, checkMessage string) (*HtmlQuestion, error) {
 
 	answerDom, err := goquery.NewDocumentFromReader(strings.NewReader(answer))
 	if err != nil {
@@ -23,8 +24,9 @@ func NewHtmlQuestion(answer string) (*HtmlQuestion, error) {
 	}
 
 	return &HtmlQuestion{
-		Answer:    answer,
-		AnswerDom: answerDom,
+		Answer:       answer,
+		CheckMessage: checkMessage,
+		AnswerDom:    answerDom,
 	}, nil
 
 }

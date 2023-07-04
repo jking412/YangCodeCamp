@@ -6,6 +6,7 @@ import (
 	"YangCodeCamp/pkg/answers"
 	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	"net/http"
 	"strconv"
 )
@@ -22,7 +23,8 @@ func GetQuestionById(c *gin.Context) {
 	}
 
 	question := &model.Question{}
-	err = db.Mysql.Model(&model.Question{}).Where("id = ?", id).First(&question).Error
+	err = db.Mysql.Model(&model.Question{}).Where("id = ?", id).
+		Preload(clause.Associations).First(&question).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{
@@ -40,7 +42,10 @@ func GetQuestionById(c *gin.Context) {
 }
 
 type SubmitQuestionReq struct {
-	Content string `json:"content"`
+	Code []struct {
+		Type    model.Status `json:"type"`
+		Content string       `json:"content"`
+	} `json:"code"`
 }
 
 type SubmitQuestionResp struct {
@@ -67,7 +72,8 @@ func SubmitQuestion(c *gin.Context) {
 	}
 
 	question := &model.Question{}
-	err = db.Mysql.Model(&model.Question{}).Where("id = ?", id).First(&question).Error
+	err = db.Mysql.Model(&model.Question{}).Where("id = ?", id).
+		Preload(clause.Associations).First(&question).Error
 	if err != nil {
 		if err == gorm.ErrRecordNotFound {
 			c.JSON(http.StatusNotFound, gin.H{
@@ -81,24 +87,28 @@ func SubmitQuestion(c *gin.Context) {
 		return
 	}
 
-	chapter := &model.Chapter{}
-	err = db.Mysql.Model(&model.Chapter{}).Where("id = ?", question.ChapterID).First(&chapter).Error
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "error",
-		})
-		return
+	// check answer
+	for _, questionDetail := range question.Detail {
+		var answerChecker answers.Answer
+		answerChecker, err = answers.GetAnswerChecker(questionDetail.Type, questionDetail.Answer, questionDetail.CheckMessage)
+		if err != nil {
+			goto outCheck
+		}
+		for _, code := range req.Code {
+			if int(code.Type) == int(questionDetail.Type) {
+				err = answerChecker.Check(code.Content)
+				if err != nil {
+					goto outCheck
+				}
+			}
+		}
 	}
 
-	answerChecker, err := answers.GetAnswerChecker(question.Type, question.Answer)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "check generate error",
-		})
-		return
-	}
+	// goto
+outCheck:
+	;
 
-	err = answerChecker.Check(req.Content)
+	// 根据err来判断是否正确
 	if err != nil {
 		if err == answers.ErrAnswerNotMatch {
 			err = db.Mysql.Model(&question).Where("id = ?", question.ID).Update("status", model.FailQuestion).Error

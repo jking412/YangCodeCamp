@@ -34,6 +34,7 @@ function In () {
             <br />
             <Input placeholder="default size" prefix={<UserOutlined />} />
             <br />
+            <div style={{paddingLeft: 15, textIndent: 2}} dangerouslySetInnerHTML={{__html:'<h1>sss</h1>'}}></div>
             <br />
             <Input size="small" placeholder="small size" prefix={<UserOutlined />} />
         </div>

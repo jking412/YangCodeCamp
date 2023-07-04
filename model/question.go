@@ -19,16 +19,23 @@ const (
 )
 
 type Question struct {
-	ID             int    `gorm:"primaryKey" json:"id"`
-	Type           Type   `json:"type"`
-	Answer         string `json:"answer"`
-	Content        string `json:"content"`
-	Description    string `json:"description"`
-	Name           string `json:"name"`
-	Status         Status `json:"status"`
-	NextQuestionID int    `json:"next_question_id"`
-	PreQuestionID  int    `json:"pre_question_id"`
-	ChapterID      int    `json:"chapter_id"`
+	ID             int               `gorm:"primaryKey" json:"id"`
+	Detail         []*QuestionDetail `json:"detail"`
+	Description    string            `json:"description"`
+	Name           string            `json:"name"`
+	Status         Status            `json:"status"`
+	NextQuestionID int               `json:"next_question_id"`
+	PreQuestionID  int               `json:"pre_question_id"`
+	ChapterID      int               `json:"chapter_id"`
+}
+
+type QuestionDetail struct {
+	ID           int    `gorm:"primaryKey" json:"id"`
+	Type         Type   `json:"type"`
+	QuestionID   int    `json:"question_id"`
+	Content      string `json:"content"`
+	Answer       string `json:"answer"`
+	CheckMessage string `json:"-"`
 }
 
 // AfterCreate
