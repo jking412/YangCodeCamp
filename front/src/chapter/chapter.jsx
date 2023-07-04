@@ -19,7 +19,6 @@ const Chapter = () => {
             setChapters(res.data.chapters);
             let total_question = 0;
             let finished_question = 0;
-
             for (let i = 0; i < res.data.chapters.length ; i++) {
                 total_question += res.data.chapters[i].total_question;
                 finished_question += res.data.chapters[i].finished_question;

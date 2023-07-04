@@ -9,6 +9,7 @@ import (
 func main() {
 	config.InitConfig("config")
 	db.Init()
+	db.Mysql.Exec("delete from question_details")
 	db.Mysql.Exec("delete from questions")
 	db.Mysql.Exec("delete from chapters")
 	db.Mysql.Exec("delete from courses")
@@ -219,46 +220,49 @@ func generateChapter() {
 func generateQuestion() {
 	questions := []*model.Question{
 		{
-			ID: 1,
+			ID:   1,
+			Name: "div的使用",
 			Detail: []*model.QuestionDetail{
 				{
-					ID:      1,
-					Content: `<div>...</div>`,
-					Answer:  `<div>this is div</div>`,
-					Type:    model.HTML,
+					ID:          1,
+					Content:     `<div>...</div>`,
+					Answer:      `<div>this is div</div>`,
+					Type:        model.HTML,
+					Description: "在div标签中输入this is div",
 				},
 			},
-			Description:    "在div标签中输入this is div",
 			NextQuestionID: 2,
 			PreQuestionID:  0,
 			ChapterID:      1,
 		},
 		{
-			ID: 2,
+			ID:   2,
+			Name: "h1的使用",
 			Detail: []*model.QuestionDetail{
 				{
-					ID:      2,
-					Content: `<h1>...</h1>`,
-					Answer:  `<h1>this is h1</h1>`,
-					Type:    model.HTML,
+					ID:          2,
+					Content:     `<h1>...</h1>`,
+					Answer:      `<h1>this is h1</h1>`,
+					Type:        model.HTML,
+					Description: "在h1标签中输入this is h1",
 				},
 			},
-			Description:    "在h1标签中输入this is h1",
 			NextQuestionID: 3,
 			PreQuestionID:  1,
 			ChapterID:      1,
 		},
 		{
-			ID: 3,
+			ID:   3,
+			Name: "p的使用",
 			Detail: []*model.QuestionDetail{
 				{
-					ID:      3,
-					Content: `<p>...</p>`,
-					Answer:  `<p>this is p</p>`,
-					Type:    model.HTML,
+					ID:          3,
+					Content:     `<p>...</p>`,
+					Answer:      `<p>this is p</p>`,
+					Type:        model.HTML,
+					Description: "在p标签中输入this is p",
 				},
 			},
-			Description:    "在p标签中输入this is p",
 			NextQuestionID: 0,
 			PreQuestionID:  2,
 			ChapterID:      1,
@@ -267,13 +271,13 @@ func generateQuestion() {
 			ID: 4,
 			Detail: []*model.QuestionDetail{
 				{
-					ID:      4,
-					Content: `margin: ...`,
-					Answer:  `margin: auto`,
-					Type:    model.CSS,
+					ID:          4,
+					Content:     `margin: ...`,
+					Answer:      `margin: auto`,
+					Type:        model.CSS,
+					Description: "设置margin为auto",
 				},
 			},
-			Description:    "设置margin为auto",
 			NextQuestionID: 5,
 			PreQuestionID:  0,
 			ChapterID:      2,
@@ -282,13 +286,13 @@ func generateQuestion() {
 			ID: 5,
 			Detail: []*model.QuestionDetail{
 				{
-					ID:      5,
-					Content: `padding: ...`,
-					Answer:  `padding: 10px`,
-					Type:    model.CSS,
+					ID:          5,
+					Content:     `padding: ...`,
+					Answer:      `padding: 10px`,
+					Type:        model.CSS,
+					Description: "设置padding为10px",
 				},
 			},
-			Description:    "设置padding为10px",
 			NextQuestionID: 6,
 			PreQuestionID:  4,
 			ChapterID:      2,
@@ -297,13 +301,13 @@ func generateQuestion() {
 			ID: 6,
 			Detail: []*model.QuestionDetail{
 				{
-					ID:      6,
-					Content: `background-color: ...`,
-					Answer:  `background-color: red`,
-					Type:    model.CSS,
+					ID:          6,
+					Content:     `background-color: ...`,
+					Answer:      `background-color: red`,
+					Type:        model.CSS,
+					Description: "设置background-color为red",
 				},
 			},
-			Description:    "设置background-color为red",
 			NextQuestionID: 0,
 			PreQuestionID:  5,
 			ChapterID:      2,
@@ -312,13 +316,13 @@ func generateQuestion() {
 			ID: 7,
 			Detail: []*model.QuestionDetail{
 				{
-					ID:      7,
-					Content: `console.log(...)`,
-					Answer:  `console.log("hello world")`,
-					Type:    model.JavaScript,
+					ID:          7,
+					Content:     `console.log(...)`,
+					Answer:      `console.log("hello world")`,
+					Type:        model.JavaScript,
+					Description: "在控制台输出hello world",
 				},
 			},
-			Description:    "在控制台输出hello world",
 			NextQuestionID: 8,
 			PreQuestionID:  0,
 			ChapterID:      3,
@@ -327,13 +331,13 @@ func generateQuestion() {
 			ID: 8,
 			Detail: []*model.QuestionDetail{
 				{
-					ID:      8,
-					Content: `var a = ...`,
-					Answer:  `var a = 1`,
-					Type:    model.JavaScript,
+					ID:          8,
+					Content:     `var a = ...`,
+					Answer:      `var a = 1`,
+					Type:        model.JavaScript,
+					Description: "声明一个变量a并赋值为1",
 				},
 			},
-			Description:    "声明一个变量a并赋值为1",
 			NextQuestionID: 0,
 			PreQuestionID:  7,
 			ChapterID:      3,

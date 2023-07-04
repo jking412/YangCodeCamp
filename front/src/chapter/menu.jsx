@@ -72,7 +72,7 @@ const YangMenu = ({chapters}) => {
                 let childrenItems = [];
                 for (let i = 0; i < res.data.questions.length; i++) {
                     let question = res.data.questions[i];
-                    let tempItem = getItem(question.description, question.id*10000, '');
+                    let tempItem = getItem(question.name, question.id*10000, '');
                     childrenItems.push(tempItem);
                 }
                 for (let i = 0; i < newItems.length; i++) {
@@ -80,6 +80,7 @@ const YangMenu = ({chapters}) => {
                         newItems[i].children = childrenItems;
                     }
                 }
+                console.log(newItems)
                 setItems(newItems);
                 setOpenKeys(e);
             })
@@ -108,9 +109,6 @@ const YangMenu = ({chapters}) => {
                             onClick={handleClick}
                             onOpenChange={handleOpenChange}
                             onSelect={handleClick}
-                            style={{
-                                width: 920,
-                            }}
                             openKeys={openKeys}
                             mode="inline"
                             items={items}

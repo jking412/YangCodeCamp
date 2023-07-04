@@ -21,7 +21,6 @@ const (
 type Question struct {
 	ID             int               `gorm:"primaryKey" json:"id"`
 	Detail         []*QuestionDetail `json:"detail"`
-	Description    string            `json:"description"`
 	Name           string            `json:"name"`
 	Status         Status            `json:"status"`
 	NextQuestionID int               `json:"next_question_id"`
@@ -33,6 +32,7 @@ type QuestionDetail struct {
 	ID           int    `gorm:"primaryKey" json:"id"`
 	Type         Type   `json:"type"`
 	QuestionID   int    `json:"question_id"`
+	Description  string `json:"description"`
 	Content      string `json:"content"`
 	Answer       string `json:"answer"`
 	CheckMessage string `json:"-"`
