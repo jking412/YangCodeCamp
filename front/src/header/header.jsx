@@ -1,7 +1,6 @@
 import { Dropdown, Space, Avatar } from 'antd';
 import React from 'react';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
-import './search';
 import './header.css';
 
 
