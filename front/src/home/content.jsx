@@ -2,6 +2,7 @@ import { Col, Row, theme } from 'antd'
 import React, { useEffect, useState } from 'react';
 import { getAllCourses } from '../request';
 import './content.css';
+import {Link} from "react-router-dom";
 
 
 const YangContent = () => {
@@ -13,7 +14,7 @@ const YangContent = () => {
     const [Course, setCourse] = useState([]);
 
     const listItems = Course.map(course =>
-        <div key={course.id} >
+        <Link key={course.id} to={`course/${course.id}`}>
             <Row className='button'>
                 <Col span={4}></Col>
                 <Col span={2}><i class={course.icon} 
@@ -24,7 +25,7 @@ const YangContent = () => {
                 <Col span={8}><div className='name'>{course.name}</div></Col>
                 <Col span={10}></Col>
             </Row>
-        </div>
+        </Link>
     );
 
     useEffect(() => {

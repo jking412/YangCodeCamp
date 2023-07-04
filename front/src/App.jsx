@@ -6,7 +6,7 @@ import YangHeader from "./header/header";
 import './App.css';
 import {Layout} from "antd";
 import Chapter from "./chapter/chapter";
-import {Route, Routes} from "react-router-dom";
+import {Link, Route, Routes} from "react-router-dom";
 
 const { Header, Content, Footer } = Layout;
 
@@ -16,14 +16,16 @@ function App() {
   return (
     <div className="App">
         <Header>
-            <YangHeader></YangHeader>
+            <Link to="/">
+                <YangHeader></YangHeader>
+            </Link>
         </Header>
         <Content>
            <Routes>
                 <Route path="/" element={<Home/>}/>
-                <Route path="/chapter/:chapterId" element={<Chapter/>} loader={
+                <Route path="/course/:courseId" element={<Chapter/>} loader={
                     ({params}) => {
-                        params.chapterId;
+                        params.courseId;
                     }
                 }/>
            </Routes>

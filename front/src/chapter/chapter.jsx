@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import YangProgress from './progress'
 import YangMenu from './menu'
-import {useParams} from "react-router-dom";
+import { useParams} from "react-router-dom";
 import {getAllChaptersByCourseId} from "../request";
 
 
@@ -15,7 +15,7 @@ const Chapter = () => {
 
 
     useEffect(() => {
-        getAllChaptersByCourseId(params.chapterId).then((res) => {
+        getAllChaptersByCourseId(params.courseId).then((res) => {
             setChapters(res.data.chapters);
             let total_question = 0;
             let finished_question = 0;
@@ -36,7 +36,6 @@ const Chapter = () => {
             minHeight: 600,
             backgroundColor: 'white',
         }}>
-
             <YangProgress totalQuestion={totalQuestion} finishedQuestion={finishedQuestion}></YangProgress>
             <YangMenu chapters={chapters}></YangMenu>
         </div>
