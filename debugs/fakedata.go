@@ -23,16 +23,19 @@ func generateClass() {
 			ID:          1,
 			Name:        "HTML",
 			Description: "HTML TEST",
+			Icon:        "fa-brands fa-html5",
 		},
 		{
 			ID:          2,
 			Name:        "CSS",
 			Description: "CSS TEST",
+			Icon:        "fa-brands fa-css3-alt",
 		},
 		{
 			ID:          3,
 			Name:        "JavaScript",
 			Description: "JavaScript TEST",
+			Icon:        "fa-brands fa-js",
 		},
 	}
 	err := db.Mysql.Create(&courses).Error

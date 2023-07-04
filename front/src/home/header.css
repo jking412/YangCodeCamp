@@ -1,0 +1,17 @@
+.Avatar {
+    border-color: white;
+    size: large;
+    border: 2px solid;
+    margin-top: -10px;
+}
+
+.Title{
+    margin-left: 40%;
+    color: white;
+    font-size: 30px;
+}
+
+.Menu{
+    color: white;
+    float: right;
+}

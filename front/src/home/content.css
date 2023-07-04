@@ -1,0 +1,41 @@
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: large;
+}
+
+.Course {
+    text-align: center;
+    position: absolute;
+    top: 20px;
+    font-size: larger;
+}
+
+.Description {
+    top: 45px;
+    text-align: center;
+    position: absolute;
+}
+
+.button {
+    border: 3px solid;
+    height: 70px;
+    background-color: whitesmoke;
+    margin-top: 5px;
+    font-size: 30px !important;
+    line-height: 3.7;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.name {
+    line-height: 3.7;
+    font-size: large;
+    display: flex;
+    justify-content: center;
+}
