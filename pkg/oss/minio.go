@@ -8,6 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"io"
 	"mime/multipart"
+	"time"
 )
 
 type MinioClient struct {
@@ -37,7 +38,7 @@ func initMinioClient() {
 		logrus.Error("minio client init error: ", err)
 		return
 	}
-
+	// 获得minio对象的分享连接
 	internalMinioClient = &MinioClient{
 		client: minioClient,
 		ctx:    context.Background(),
@@ -115,4 +116,13 @@ func (m *MinioClient) DeleteObject(bucketName, objectName string) bool {
 		return false
 	}
 	return true
+}
+
+func (m *MinioClient) ShareURL(bucketName, objectName string) string {
+	presignedURL, err := m.client.PresignedGetObject(m.ctx, bucketName, objectName, time.Hour*24*7, nil)
+	if err != nil {
+		logrus.Error("minio get share url error: ", err)
+		return ""
+	}
+	return presignedURL.String()
 }

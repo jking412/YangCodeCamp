@@ -13,6 +13,7 @@ type Oss interface {
 	DownloadObject(bucketName, objectName string) (interface{}, bool)
 	DeleteObject(bucketName, objectName string) bool
 	IsExistObject(bucketName, objectName string) bool
+	ShareURL(bucketName, objectName string) string
 }
 
 type Client struct {
@@ -57,4 +58,8 @@ func DeleteFile(bucketName, objectName string) bool {
 
 func IsExistFile(bucketName, objectName string) bool {
 	return client.IsExistObject(bucketName, objectName)
+}
+
+func ShareURL(bucketName, objectName string) string {
+	return client.ShareURL(bucketName, objectName)
 }

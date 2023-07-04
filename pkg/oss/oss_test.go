@@ -45,3 +45,8 @@ func TestDeleteFile(t *testing.T) {
 		t.Error("删除文件失败")
 	}
 }
+
+func TestShareURL(t *testing.T) {
+	url := ShareURL("test", "test.txt")
+	fmt.Println(url)
+}
