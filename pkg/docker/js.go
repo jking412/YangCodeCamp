@@ -3,6 +3,7 @@ package docker
 import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
+	"os/exec"
 )
 
 func initJSEnvironment() error {
@@ -54,6 +55,20 @@ func initJSEnvironment() error {
 
 	err = cli.client.ContainerStart(cli.ctx, resp.ID, types.ContainerStartOptions{})
 	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func CheckJS(content, answer string) error {
+	cmd := exec.Command("docker", "exec", "js", "node", "-e", content)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return err
+	}
+
+	if string(output[0:len(output)-1]) != answer {
 		return err
 	}
 

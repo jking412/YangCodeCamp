@@ -1,6 +1,6 @@
 package answers
 
-import "os/exec"
+import "YangCodeCamp/pkg/docker"
 
 type JSQuestion struct {
 	Answer       string
@@ -18,13 +18,8 @@ func NewJSQuestion(answer, checkMessage string) (*JSQuestion, error) {
 
 func (q *JSQuestion) Check(content any) error {
 
-	cmd := exec.Command("docker", "exec", "js", "node", "-e", content.(string))
-	output, err := cmd.CombinedOutput()
+	err := docker.CheckJS(content.(string), q.Answer)
 	if err != nil {
-		return err
-	}
-
-	if string(output[0:len(output)-1]) != q.Answer {
 		return ErrAnswerNotMatch
 	}
 
