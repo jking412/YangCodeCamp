@@ -1,9 +1,10 @@
 
-IMAGE_NAME = "yangcodecamp-web"
+IMAGE_NAME=yangcodecamp-web
 
 all:
-	docker build -t $(IMAGE_NAME) .
+	docker compose up -d
 
 clean:
+	docker compose down
 	docker rmi $(IMAGE_NAME)
 
