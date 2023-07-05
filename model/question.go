@@ -10,6 +10,7 @@ const (
 	HTML Type = iota
 	CSS
 	JavaScript
+	PythonChoice
 )
 
 const (
@@ -20,7 +21,7 @@ const (
 
 type Question struct {
 	ID             int               `gorm:"primaryKey" json:"id"`
-	Detail         []*QuestionDetail `json:"detail"`
+	Detail         []*QuestionDetail `json:"details"`
 	Name           string            `json:"name"`
 	Status         Status            `json:"status"`
 	NextQuestionID int               `json:"next_question_id"`
