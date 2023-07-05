@@ -1,6 +1,7 @@
 package docker
 
 import (
+	"YangCodeCamp/pkg/answers"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"os/exec"
@@ -69,7 +70,7 @@ func CheckJS(content, answer string) error {
 	}
 
 	if string(output[0:len(output)-1]) != answer {
-		return err
+		return answers.ErrAnswerNotMatch
 	}
 
 	return nil

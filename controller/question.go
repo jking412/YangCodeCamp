@@ -43,8 +43,8 @@ func GetQuestionById(c *gin.Context) {
 
 type SubmitQuestionReq struct {
 	Code []struct {
-		Type    model.Status `json:"type"`
-		Content string       `json:"content"`
+		Type    model.Type `json:"type"`
+		Content string     `json:"content"`
 	} `json:"code"`
 }
 
@@ -95,13 +95,21 @@ func SubmitQuestion(c *gin.Context) {
 		if err != nil {
 			goto outCheck
 		}
+		var matchFlag = false
 		for _, code := range req.Code {
 			if int(code.Type) == int(question.Type) {
+				matchFlag = true
 				err = answerChecker.Check(code.Content)
 				if err != nil {
 					goto outCheck
 				}
 			}
+		}
+		if !matchFlag {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"message": "type error",
+			})
+			return
 		}
 	} else {
 		for _, questionDetail := range question.Detail {
@@ -110,13 +118,21 @@ func SubmitQuestion(c *gin.Context) {
 			if err != nil {
 				goto outCheck
 			}
+			var matchFlag = false
 			for _, code := range req.Code {
 				if int(code.Type) == int(questionDetail.Type) {
+					matchFlag = true
 					err = answerChecker.Check(code.Content)
 					if err != nil {
 						goto outCheck
 					}
 				}
+			}
+			if !matchFlag {
+				c.JSON(http.StatusBadRequest, gin.H{
+					"message": "type error",
+				})
+				return
 			}
 		}
 	}
