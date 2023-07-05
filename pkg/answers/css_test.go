@@ -17,3 +17,29 @@ func Test_CSSParse(t *testing.T) {
 	css, _ := parser.Parse(cssInput)
 	fmt.Println(css)
 }
+
+func TestCssQuestion_Check(t *testing.T) {
+	cssInput := `.class1{
+    color: red;
+}
+
+#id1{
+    color: blue;
+}`
+
+	cssContent := `
+#id1{
+    color: blue;
+}
+.class1{
+    color: red;
+}
+
+`
+
+	cssQuestion, _ := NewCssQuestion(cssInput, "")
+	err := cssQuestion.Check(cssContent)
+	if err != nil {
+		t.Log(err)
+	}
+}

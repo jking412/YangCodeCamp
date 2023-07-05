@@ -38,6 +38,18 @@ func generateClass() {
 			Description: "JavaScript TEST",
 			Icon:        "fa-brands fa-js",
 		},
+		{
+			ID:          4,
+			Name:        "Python",
+			Description: "Python TEST",
+			Icon:        "fa-brands fa-python",
+		},
+		{
+			ID:          5,
+			Name:        "C++",
+			Description: "C++ TEST",
+			Icon:        "fa-solid fa-c",
+		},
 	}
 	err := db.Mysql.Create(&courses).Error
 	if err != nil {
@@ -210,6 +222,13 @@ func generateChapter() {
 			NextChapterID: 0,
 			PreChapterID:  3,
 		},
+		{
+			ID:            7,
+			Name:          "Python-Fisrt",
+			CourseID:      4,
+			NextChapterID: 0,
+			PreChapterID:  0,
+		},
 	}
 	err := db.Mysql.Create(&chapters).Error
 	if err != nil {
@@ -231,6 +250,7 @@ func generateQuestion() {
 					Description: "在div标签中输入this is div",
 				},
 			},
+			Type:           model.HTML,
 			NextQuestionID: 2,
 			PreQuestionID:  0,
 			ChapterID:      1,
@@ -268,16 +288,28 @@ func generateQuestion() {
 			ChapterID:      1,
 		},
 		{
-			ID: 4,
+			ID:   4,
+			Name: "margin的使用",
 			Detail: []*model.QuestionDetail{
 				{
-					ID:          4,
-					Content:     `margin: ...`,
-					Answer:      `margin: auto`,
+					ID:      4,
+					Content: `<div class="test">this is div</div>`,
+					Answer:  `<div class="test">this is div</div>`,
+					Type:    model.HTML,
+				},
+				{
+					ID: 10,
+					Content: `.test{
+margin: ...
+}`,
+					Answer: `.test{
+margin: auto
+}`,
 					Type:        model.CSS,
 					Description: "设置margin为auto",
 				},
 			},
+			Type:           model.CSS,
 			NextQuestionID: 5,
 			PreQuestionID:  0,
 			ChapterID:      2,
@@ -318,11 +350,12 @@ func generateQuestion() {
 				{
 					ID:          7,
 					Content:     `console.log(...)`,
-					Answer:      `console.log("hello world")`,
+					Answer:      `hello world`,
 					Type:        model.JavaScript,
 					Description: "在控制台输出hello world",
 				},
 			},
+			Type:           model.JavaScript,
 			NextQuestionID: 8,
 			PreQuestionID:  0,
 			ChapterID:      3,
@@ -341,6 +374,43 @@ func generateQuestion() {
 			NextQuestionID: 0,
 			PreQuestionID:  7,
 			ChapterID:      3,
+		},
+		{
+			ID: 9,
+			Detail: []*model.QuestionDetail{
+				{
+					ID:          9,
+					Content:     "A: a",
+					Type:        model.PythonChoice,
+					Description: "",
+				},
+				{
+					ID:      11,
+					Content: "B: b",
+					Type:    model.PythonChoice,
+				},
+				{
+					ID:      12,
+					Content: "C: c",
+					Type:    model.PythonChoice,
+				},
+				{
+					ID:      13,
+					Content: "D: d",
+					Type:    model.PythonChoice,
+				},
+				{
+					ID:          14,
+					Content:     "src",
+					Description: "print(a)结果",
+					Answer:      "1",
+					Type:        model.Other,
+				},
+			},
+			Type:           model.PythonChoice,
+			NextQuestionID: 0,
+			PreQuestionID:  0,
+			ChapterID:      7,
 		},
 	}
 	for _, question := range questions {

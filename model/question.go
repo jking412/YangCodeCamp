@@ -11,6 +11,7 @@ const (
 	CSS
 	JavaScript
 	PythonChoice
+	Other
 )
 
 const (
@@ -23,6 +24,7 @@ type Question struct {
 	ID             int               `gorm:"primaryKey" json:"id"`
 	Detail         []*QuestionDetail `json:"details"`
 	Name           string            `json:"name"`
+	Type           Type              `json:"type"`
 	Status         Status            `json:"status"`
 	NextQuestionID int               `json:"next_question_id"`
 	PreQuestionID  int               `json:"pre_question_id"`

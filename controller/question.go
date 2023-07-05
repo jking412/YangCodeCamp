@@ -88,17 +88,34 @@ func SubmitQuestion(c *gin.Context) {
 	}
 
 	// check answer
-	for _, questionDetail := range question.Detail {
+	if question.Type == model.PythonChoice {
 		var answerChecker answers.Answer
-		answerChecker, err = answers.GetAnswerChecker(questionDetail.Type, questionDetail.Answer, questionDetail.CheckMessage)
+		length := len(question.Detail)
+		answerChecker, err = answers.GetAnswerChecker(question.Type, question.Detail[length-1].Answer, question.Detail[length-1].CheckMessage)
 		if err != nil {
 			goto outCheck
 		}
 		for _, code := range req.Code {
-			if int(code.Type) == int(questionDetail.Type) {
+			if int(code.Type) == int(question.Type) {
 				err = answerChecker.Check(code.Content)
 				if err != nil {
 					goto outCheck
+				}
+			}
+		}
+	} else {
+		for _, questionDetail := range question.Detail {
+			var answerChecker answers.Answer
+			answerChecker, err = answers.GetAnswerChecker(questionDetail.Type, questionDetail.Answer, questionDetail.CheckMessage)
+			if err != nil {
+				goto outCheck
+			}
+			for _, code := range req.Code {
+				if int(code.Type) == int(questionDetail.Type) {
+					err = answerChecker.Check(code.Content)
+					if err != nil {
+						goto outCheck
+					}
 				}
 			}
 		}
