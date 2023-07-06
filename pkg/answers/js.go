@@ -16,14 +16,14 @@ func NewJSQuestion(answer, checkMessage string) (*JSQuestion, error) {
 
 }
 
-func (q *JSQuestion) Check(content any) error {
+func (q *JSQuestion) Check(content any) (string, error) {
 
-	err := docker.CheckJS(content.(string), q.Answer)
+	output, err := docker.CheckJS(content.(string), q.Answer)
 	if err != nil {
-		return ErrAnswerNotMatch
+		return output, ErrAnswerNotMatch
 	}
 
-	return nil
+	return output, nil
 }
 
 func (q *JSQuestion) GetAnswer() any {

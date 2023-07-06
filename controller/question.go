@@ -49,7 +49,8 @@ type SubmitQuestionReq struct {
 }
 
 type SubmitQuestionResp struct {
-	Result model.Status `json:"result"`
+	Result  model.Status `json:"result"`
+	Content []string     `json:"content"`
 }
 
 func SubmitQuestion(c *gin.Context) {
@@ -87,6 +88,7 @@ func SubmitQuestion(c *gin.Context) {
 		return
 	}
 
+	var resultContent = make([]string, 0)
 	// check answer
 	if question.Type == model.PythonChoice {
 		var answerChecker answers.Answer
@@ -99,7 +101,9 @@ func SubmitQuestion(c *gin.Context) {
 		for _, code := range req.Code {
 			if int(code.Type) == int(question.Type) {
 				matchFlag = true
-				err = answerChecker.Check(code.Content)
+				var content string
+				content, err = answerChecker.Check(code.Content)
+				resultContent = append(resultContent, content)
 				if err != nil {
 					goto outCheck
 				}
@@ -122,7 +126,9 @@ func SubmitQuestion(c *gin.Context) {
 			for _, code := range req.Code {
 				if int(code.Type) == int(questionDetail.Type) {
 					matchFlag = true
-					err = answerChecker.Check(code.Content)
+					var content string
+					content, err = answerChecker.Check(code.Content)
+					resultContent = append(resultContent, content)
 					if err != nil {
 						goto outCheck
 					}
@@ -152,7 +158,8 @@ outCheck:
 				return
 			}
 			c.JSON(http.StatusOK, SubmitQuestionResp{
-				Result: model.FailQuestion,
+				Result:  model.FailQuestion,
+				Content: resultContent,
 			})
 			return
 		}
@@ -171,6 +178,7 @@ outCheck:
 		return
 	}
 	c.JSON(http.StatusOK, SubmitQuestionResp{
-		Result: model.PassQuestion,
+		Result:  model.PassQuestion,
+		Content: resultContent,
 	})
 }

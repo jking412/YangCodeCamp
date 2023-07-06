@@ -14,11 +14,12 @@ func NewPythonChoiceQuestion(answer, checkMessage string) (*PythonChoiceQuestion
 
 }
 
-func (q *PythonChoiceQuestion) Check(content any) error {
-	if content.(string) != q.Answer {
-		return ErrAnswerNotMatch
+func (q *PythonChoiceQuestion) Check(content any) (string, error) {
+	c := content.(string)
+	if c != q.Answer {
+		return c, ErrAnswerNotMatch
 	}
-	return nil
+	return c, nil
 }
 
 func (q *PythonChoiceQuestion) GetAnswer() any {

@@ -23,14 +23,15 @@ func NewCssQuestion(answer, checkMessage string) (Answer, error) {
 	}, nil
 }
 
-func (q *CssQuestion) Check(content any) error {
-	contentCss, err := parser.Parse(content.(string))
+func (q *CssQuestion) Check(content any) (string, error) {
+	c := content.(string)
+	contentCss, err := parser.Parse(c)
 	if err != nil {
-		return err
+		return c, err
 	}
 
 	if len(contentCss.Rules) != len(q.AnswerCss.Rules) {
-		return ErrAnswerNotMatch
+		return c, ErrAnswerNotMatch
 	}
 
 	for _, rule := range q.AnswerCss.Rules {
@@ -42,11 +43,11 @@ func (q *CssQuestion) Check(content any) error {
 			}
 		}
 		if !flag {
-			return ErrAnswerNotMatch
+			return c, ErrAnswerNotMatch
 		}
 	}
 
-	return nil
+	return c, nil
 }
 
 func (q *CssQuestion) GetAnswer() any {

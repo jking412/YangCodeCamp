@@ -6,7 +6,7 @@ import (
 )
 
 type Answer interface {
-	Check(content any) error
+	Check(content any) (string, error)
 	GetAnswer() any
 }
 

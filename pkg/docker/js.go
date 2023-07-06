@@ -1,7 +1,9 @@
 package docker
 
 import (
+	"bytes"
 	"errors"
+	"fmt"
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"os/exec"
@@ -62,16 +64,19 @@ func initJSEnvironment() error {
 	return nil
 }
 
-func CheckJS(content, answer string) error {
+func CheckJS(content, answer string) (string, error) {
 	cmd := exec.Command("docker", "exec", "js", "node", "-e", content)
 	output, err := cmd.CombinedOutput()
+	outputStr := string(bytes.TrimRight(output, "\n"))
+	fmt.Println("!!! outputStr:", outputStr)
+	fmt.Println("!!! err:", err)
 	if err != nil {
-		return err
+		return outputStr, err
 	}
 
-	if string(output[0:len(output)-1]) != answer {
-		return errors.New("answer not match")
+	if outputStr != answer {
+		return outputStr, errors.New("answer not match")
 	}
 
-	return nil
+	return outputStr, nil
 }

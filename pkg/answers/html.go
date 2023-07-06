@@ -31,11 +31,13 @@ func NewHtmlQuestion(answer, checkMessage string) (*HtmlQuestion, error) {
 
 }
 
-func (q *HtmlQuestion) Check(content any) error {
+func (q *HtmlQuestion) Check(content any) (string, error) {
+
+	c := content.(string)
 
 	contentDom, err := goquery.NewDocumentFromReader(strings.NewReader(content.(string)))
 	if err != nil {
-		return err
+		return c, err
 	}
 
 	contentRoot := contentDom.Nodes[0]
@@ -48,11 +50,11 @@ func (q *HtmlQuestion) Check(content any) error {
 
 		for {
 			if answerNode.Type != contentNode.Type {
-				return ErrAnswerNotMatch
+				return c, ErrAnswerNotMatch
 			}
 
 			if strings.Trim(answerNode.Data, " ") != strings.Trim(contentNode.Data, " ") {
-				return ErrAnswerNotMatch
+				return c, ErrAnswerNotMatch
 			}
 
 			if answerNode.NextSibling == nil || contentNode.NextSibling == nil {
@@ -68,10 +70,10 @@ func (q *HtmlQuestion) Check(content any) error {
 	}
 
 	if answerNode != nil || contentNode != nil {
-		return ErrAnswerNotMatch
+		return c, ErrAnswerNotMatch
 	}
 
-	return nil
+	return c, nil
 }
 
 func (q *HtmlQuestion) GetAnswer() any {
