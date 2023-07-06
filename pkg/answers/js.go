@@ -18,7 +18,9 @@ func NewJSQuestion(answer, checkMessage string) (*JSQuestion, error) {
 
 func (q *JSQuestion) Check(content any) (string, error) {
 
-	output, err := docker.CheckJS(content.(string), q.Answer)
+	c := content.(string) + q.CheckMessage
+
+	output, err := docker.CheckJS(c, q.Answer)
 	if err != nil {
 		return output, ErrAnswerNotMatch
 	}

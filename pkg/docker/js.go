@@ -25,7 +25,7 @@ func initJSEnvironment() error {
 	}
 
 	if pullFlag {
-		_, err := cli.client.ImagePull(cli.ctx, "node:latest", types.ImagePullOptions{})
+		_, err = cli.client.ImagePull(cli.ctx, "node:latest", types.ImagePullOptions{})
 		if err != nil {
 			return err
 		}

@@ -89,6 +89,7 @@ func SubmitQuestion(c *gin.Context) {
 	}
 
 	var resultContent = make([]string, 0)
+	var passFlag = true
 	// check answer
 	if question.Type == model.PythonChoice {
 		var answerChecker answers.Answer
@@ -105,7 +106,8 @@ func SubmitQuestion(c *gin.Context) {
 				content, err = answerChecker.Check(code.Content)
 				resultContent = append(resultContent, content)
 				if err != nil {
-					goto outCheck
+					passFlag = false
+					break
 				}
 			}
 		}
@@ -120,7 +122,7 @@ func SubmitQuestion(c *gin.Context) {
 			var answerChecker answers.Answer
 			answerChecker, err = answers.GetAnswerChecker(questionDetail.Type, questionDetail.Answer, questionDetail.CheckMessage)
 			if err != nil {
-				goto outCheck
+				break
 			}
 			var matchFlag = false
 			for _, code := range req.Code {
@@ -130,7 +132,8 @@ func SubmitQuestion(c *gin.Context) {
 					content, err = answerChecker.Check(code.Content)
 					resultContent = append(resultContent, content)
 					if err != nil {
-						goto outCheck
+						passFlag = false
+						break
 					}
 				}
 			}
@@ -143,9 +146,10 @@ func SubmitQuestion(c *gin.Context) {
 		}
 	}
 
-	// goto
 outCheck:
-	;
+	if !passFlag {
+		err = answers.ErrAnswerNotMatch
+	}
 
 	// 根据err来判断是否正确
 	if err != nil {

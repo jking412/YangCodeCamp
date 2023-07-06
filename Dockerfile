@@ -4,9 +4,9 @@ WORKDIR /app
 COPY . .
 RUN cp config.docker.yaml config.yaml
 RUN go env -w  GOPROXY=https://goproxy.cn,direct
-RUN go mod download && go build -o main && go build -o fake ./debugs
+RUN go mod download && go build -o main && go build -o fake ./debugs && chmod +x ./docker-entrypoint.sh
 # 先执行fake，再执行main
-CMD ["./docker-entrypoint.sh"]
+CMD ["./main"]
 
 #FROM alpine:latest
 #WORKDIR /root

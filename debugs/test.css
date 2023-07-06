@@ -1,0 +1,12 @@
+h1 {
+    text-align: center;
+}
+
+.color-marker{
+    background-color: red;
+}
+
+/*将id为blue-marker的元素的背景色设置为蓝色*/
+#blue-marker{
+    background-color: blue;
+}
