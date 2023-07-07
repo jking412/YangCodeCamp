@@ -4,7 +4,6 @@ import './progress.css'
 
 
 const YangProgress = ({totalQuestion,finishedQuestion}) => {
-
     return (
         <div>
             <Row>

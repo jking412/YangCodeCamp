@@ -1,9 +1,8 @@
 import { Col, Row, theme } from 'antd'
 import React, { useEffect, useState } from 'react';
 import { getAllCourses } from '../request';
-import './content.css';
 import {Link} from "react-router-dom";
-
+import './content.css';
 
 const YangContent = () => {
 
@@ -42,8 +41,10 @@ const YangContent = () => {
             }}>
                 <Col span={6}></Col>
                 <Col span={12} className='title'>
-                    <div className='Course'>Course Selection</div>
-                    <div className='Description'>Here you can choose from multiple courses (e.g.HTML,CSS,JS) to practice</div>
+                    <div className='Course'>&nbsp;&nbsp;&nbsp;Course Selection</div>
+                    <div className='Description'>
+                        &nbsp;&nbsp;&nbsp;&nbsp; you can choose from multiple courses (e.g.HTML,CSS,JS) to practice
+                    </div>
                 </Col>
                 <Col span={6}></Col>
             </Row>

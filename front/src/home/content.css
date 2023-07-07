@@ -8,23 +8,28 @@
 .Course {
     text-align: center;
     position: absolute;
-    top: 20px;
-    font-size: larger;
+    top: 35px;
+    font-size:25px;
 }
 
 .Description {
-    top: 45px;
+    top: 70px;
     text-align: center;
     position: absolute;
+    font-size: 20px;
 }
 
 .button {
     border: 3px solid;
     height: 70px;
+    color:black;
     background-color: whitesmoke;
-    margin-top: 5px;
-    font-size: 30px !important;
+    margin-top: 8px;
     line-height: 3.7;
+}
+
+.button:hover{
+    background-color: #dee2e6;
 }
 
 .icon {
@@ -38,4 +43,5 @@
     font-size: large;
     display: flex;
     justify-content: center;
+    font-family: sans-serif;
 }

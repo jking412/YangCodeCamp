@@ -1,9 +1,11 @@
-import React, {useEffect} from 'react';
-import {MailOutlined, SettingOutlined, AppstoreOutlined} from '@ant-design/icons';
-import {Menu, Switch, Row, Col} from 'antd';
-import {useState} from 'react';
+import React, { useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
+// import {MailOutlined, SettingOutlined, AppstoreOutlined} from '@ant-design/icons';
+import{CheckCircleOutlined,ClockCircleOutlined,MinusOutlined} from '@ant-design/icons';
+import { Menu, Switch, Row, Col } from 'antd';
+import { useState } from 'react';
 import './menu.css'
-import {getAllQuestionsByChapterId} from "../request";
+import { getAllQuestionsByChapterId } from "../request";
 
 function getItem(label, key, icon, children) {
     return {
@@ -35,10 +37,12 @@ function getItem(label, key, icon, children) {
 //     ]),
 // ];
 
-const YangMenu = ({chapters}) => {
+const YangMenu = ({ chapters }) => {
     const [theme, setTheme] = useState('dark');
     const [openKeys, setOpenKeys] = useState([]);
     const [items, setItems] = useState([]);
+
+    const navigator = useNavigate();
 
 
     useEffect(() => {
@@ -55,13 +59,17 @@ const YangMenu = ({chapters}) => {
         setTheme(value ? 'dark' : 'light');
     };
     const handleClick = (e) => {
-        // console.log('click ', e);
-
+        let id = e.key / 10000;
+        navigator(`/question/${id}`)
     };
+
+    const Unfinished = 0;
+    const Success = 1;
+    const Ondoing = 2;
 
     const handleOpenChange = (e) => {
         let id;
-        if (e.length > openKeys.length){
+        if (e.length > openKeys.length) {
             for (let i = 0; i < e.length; i++) {
                 if (!openKeys.includes(e[i])) {
                     id = e[i];
@@ -72,7 +80,17 @@ const YangMenu = ({chapters}) => {
                 let childrenItems = [];
                 for (let i = 0; i < res.data.questions.length; i++) {
                     let question = res.data.questions[i];
-                    let tempItem = getItem(question.name, question.id*10000, '');
+                    let tempItem;
+                    if(res.data.questions[i].status == Unfinished){
+                        tempItem = getItem(question.name, question.id * 10000, <MinusOutlined />);
+                    }
+                    else if(res.data.questions[i].status == Success){
+                        tempItem = getItem(question.name, question.id * 10000, <CheckCircleOutlined />);
+                    }
+                    else if(res.data.questions[i].status == Ondoing){
+                        tempItem = getItem(question.name, question.id * 10000, <ClockCircleOutlined />);
+                    }
+
                     childrenItems.push(tempItem);
                 }
                 for (let i = 0; i < newItems.length; i++) {
@@ -101,8 +119,8 @@ const YangMenu = ({chapters}) => {
                         checkedChildren="Dark"
                         unCheckedChildren="Light"
                     />
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
                     <div>
                         <Menu
                             theme={theme}

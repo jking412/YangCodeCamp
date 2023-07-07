@@ -1,0 +1,121 @@
+.Home-Header {
+    position: 'static';
+    top: 0;
+    z-index: 1;
+    width: '100%';
+    display: 'flex';
+    align-items: 'center';
+    background-color: black;
+}
+
+.Avatar {
+    border-color: white;
+    size: large;
+    border: 2px solid;
+    margin-top: -10px;
+}
+
+.Title {
+    margin-left: 40%;
+    color: white;
+    font-size: 30px;
+}
+
+.Menu {
+    color: white;
+    float: right;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Exam-Row {
+    height: 50px;
+    align-items: center;
+    background-color: black;
+    border: 10px white;
+}
+
+.Back {
+    margin-left: 25px;
+    height: 30px;
+    background-color: white;
+    width: 50px;
+    padding-top: 5px;
+    padding-left: 15px;
+}
+
+.JsFile {
+    margin-left: -30px;
+    width: 100px;
+    height: 30px;
+    background-color: white;
+    padding-left: 30px;
+    line-height: 30px;
+}
+
+/* .Goal {
+    height: 30px;
+    background-color: white;
+    width: 100px;
+    padding-top: 5px;
+    padding-left: 15px;
+}
+
+.Preview {
+    height: 30px;
+    background-color: white;
+    width: 100px;
+    padding-top: 5px;
+    padding-left: 15px;
+} */
+
+.JsContent {
+    padding: 24px;
+    height: 600px;
+    background-color: #EFEFEF;
+    width: 55%;
+    float: left;
+}
+
+.Divider {
+    height: 1px;
+    background-color: white;
+}
+
+.JsCode {
+    height: 600px;
+    background-color: white;
+    width: 45%;
+    float: right;
+}
+
+.JsExegesis {
+    height: 500px;
+    background-color: #EFEFEF;
+    width: 100%;
+}
+
+.Js_Code {
+    height: 200px;
+    padding-left: 10px;
+    padding-top: 20px;
+    background-color: white;
+    width: 100%;
+    /* caret-color: transparent;
+    text-indent: -9999px; */
+    border: 0;
+    height: 60%;
+}
+
+.Button {
+    margin-top: 5px;
+}
+
+.console{
+    background-color: whitesmoke;
+    height: 40%;
+}

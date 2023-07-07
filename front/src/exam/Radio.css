@@ -1,0 +1,123 @@
+.Home-Header {
+    position: 'static';
+    top: 0;
+    z-index: 1;
+    width: '100%';
+    display: 'flex';
+    align-items: 'center';
+    background-color: black;
+}
+
+.Avatar {
+    border-color: white;
+    size: large;
+    border: 2px solid;
+    margin-top: -10px;
+}
+
+.Title {
+    margin-left: 40%;
+    color: white;
+    font-size: 30px;
+}
+
+.Menu {
+    color: white;
+    float: right;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Exam-Row {
+    height: 50px;
+    align-items: center;
+    background-color: black;
+    border: 10px white;
+}
+
+.Back {
+    margin-left: 25px;
+    height: 30px;
+    background-color: white;
+    width: 50px;
+    padding-top: 5px;
+    padding-left: 15px;
+}
+
+.File {
+    margin-left: -30px;
+    width: 100px;
+    height: 30px;
+    background-color: white;
+    padding-left: 25px;
+    line-height: 30px;
+}
+
+
+
+.Divider {
+    height: 1px;
+    background-color: white;
+}
+
+
+.RadioContent {
+    height: 700px;
+    background-color: #EFEFEF;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.mainContent {
+    height: 700px;
+    width: 50%;
+    background-color: #EFEFEF;
+}
+
+.video {
+    margin-top: 10px;
+    width: 100%;
+    height: 300px;
+}
+
+.questionDescription {
+    margin-top: 10px;
+    width: 100%;
+    height: 50px;
+    background-color: #EFEFEF;
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.result {
+    margin-top: 40px;
+    width: 100%;
+    height: 10px;
+    background-color: #EFEFEF;
+    text-align: center;
+}
+
+.post {
+    width: 100%;
+    height: 50px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    font-size: larger;
+    background-color: gray;
+    border-radius: 10px;
+}
+
+.radio {
+    border: 1px solid black;
+    margin-top: 20px;
+    border-radius: 10px;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
